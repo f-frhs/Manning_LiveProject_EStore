@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  shoppingcartservice:
+    image: ${DOCKER_REGISTRY-}shoppingcartservice
+    build:
+      context: .
+      dockerfile: ShoppingCartService/Dockerfile
+    depends_on:
+      - mongo    
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 1234:27017
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081

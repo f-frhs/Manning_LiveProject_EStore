@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ShoppingCartService</name>
+    </assembly>
+    <members>
+        <member name="M:ShoppingCartService.Controllers.ShoppingCartController.GetAll">
+            <summary>
+            Get all shopping carts
+            </summary>
+        </member>
+        <member name="M:ShoppingCartService.Controllers.ShoppingCartController.FindById(System.String)">
+            <summary>
+            Get cart by id
+            </summary>
+            <param name="id">Shopping cart id</param>
+        </member>
+        <member name="M:ShoppingCartService.Controllers.ShoppingCartController.CalculateTotals(System.String)">
+            <summary>
+            Checkout shopping cart and calculate total cost
+            </summary>
+            <param name="id">Shopping cart id</param>
+        </member>
+        <member name="M:ShoppingCartService.Controllers.ShoppingCartController.Create(ShoppingCartService.Controllers.Models.CreateCartDto)">
+            <summary>
+            Create a new shopping cart
+            </summary>
+        </member>
+        <member name="M:ShoppingCartService.Controllers.ShoppingCartController.AddItemToCart(System.String,ShoppingCartService.Controllers.Models.ItemDto)">
+            <summary>
+            Add product to existing cart
+            </summary>
+            <param name="id">Shopping cart id</param>
+            <param name="item">Item details</param>
+        </member>
+        <member name="M:ShoppingCartService.Controllers.ShoppingCartController.RemoveItemFromCart(System.String,System.String)">
+            <summary>
+            Remove item from shopping cart
+            </summary>
+            <param name="id">Shopping cart id</param>
+            <param name="productId">The item's product id</param>
+        </member>
+        <member name="M:ShoppingCartService.Controllers.ShoppingCartController.DeleteCart(System.String)">
+            <summary>
+            Delete shopping cart
+            </summary>
+            <param name="id">Shopping cart id</param>
+        </member>
+        <member name="T:ShoppingCartService.Models.CustomerType">
+            <summary>
+            Customer type
+            </summary>
+        </member>
+        <member name="T:ShoppingCartService.Models.ShippingMethod">
+            <summary>
+            Shipping method
+            </summary>
+        </member>
+        <member name="F:ShoppingCartService.Models.ShippingMethod.Standard">
+            <summary>
+            Slow
+            </summary>
+        </member>
+        <member name="F:ShoppingCartService.Models.ShippingMethod.Expedited">
+            <summary>
+            Slow, but make an effort
+            </summary>
+        </member>
+        <member name="F:ShoppingCartService.Models.ShippingMethod.Priority">
+            <summary>
+            I need it as soon as possible
+            </summary>
+        </member>
+        <member name="F:ShoppingCartService.Models.ShippingMethod.Express">
+            <summary>
+            I will pay to have it here tomorrow!
+            </summary>
+        </member>
+    </members>
+</doc>
