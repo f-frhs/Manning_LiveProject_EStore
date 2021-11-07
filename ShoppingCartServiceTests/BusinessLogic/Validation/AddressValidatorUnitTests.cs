@@ -5,7 +5,7 @@ using ShoppingCartService.BusinessLogic.Validation;
 
 namespace ShoppingCartServiceTests.BusinessLogic.Validation
 {
-    public class AddressValidatorTests
+    public class AddressValidatorUnitTests
     {
         [Fact]
         public void IsValid_doesNotHaveCountry_returnFalse()

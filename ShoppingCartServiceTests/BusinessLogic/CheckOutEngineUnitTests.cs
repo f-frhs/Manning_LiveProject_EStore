@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ShoppingCartServiceTests.BusinessLogic
 {
-    public class CheckOutEngineTests
+    public class CheckOutEngineUnitTests
     {
         private static Item createItem(uint i)
         {
@@ -40,7 +40,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
 
         private CheckOutEngine sut;
 
-        public CheckOutEngineTests()
+        public CheckOutEngineUnitTests()
         {
             var config = new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile()));
             var mapper = config.CreateMapper();
