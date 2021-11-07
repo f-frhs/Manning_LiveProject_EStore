@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using ShoppingCartService.BusinessLogic;
 using ShoppingCartService.DataAccess.Entities;
 using ShoppingCartService.Mapping;
@@ -10,33 +9,14 @@ namespace ShoppingCartServiceTests.BusinessLogic
 {
     public class CheckOutEngineUnitTests
     {
-        private static Item createItem(uint i)
-        {
-            return new Item
-            {
-                ProductId = $"p{i}",
-                ProductName = $"product{i}",
-                Price = i * 100,
-                Quantity = i,
-            };
-        }
 
-        private Item item1 = createItem(1);
-        private Item item2 = createItem(2);
+        private Item item1 = TestHelper.CreateItem(1, 1);
+        private Item item2 = TestHelper.CreateItem(2, 2);
 
-        private static Address createAddress(string country, string city, string street)
-        {
-            return new Address
-            {
-                Country = country,
-                City = city,
-                Street = street,
-            };
-        }
-
-        private Address theSameCity = createAddress("USA", "Dallas", "other street1");
-        private Address theSameCountry = createAddress("USA", "Other city", "other street");
-        private Address otherCountry = createAddress("Other country", "Other city", "other street");
+        private Address warehouseAddress = TestHelper.CreateAddress("USA", "Dallas", "street1");
+        private Address theSameCity = TestHelper.CreateAddress("USA", "Dallas", "other street1");
+        private Address theSameCountry = TestHelper.CreateAddress("USA", "Other city", "other street");
+        private Address otherCountry = TestHelper.CreateAddress("Other country", "Other city", "other street");
 
         private CheckOutEngine sut;
 
@@ -44,27 +24,14 @@ namespace ShoppingCartServiceTests.BusinessLogic
         {
             var config = new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile()));
             var mapper = config.CreateMapper();
-            var shippingCalculator = new ShippingCalculator();
+            var shippingCalculator = new ShippingCalculator(warehouseAddress);
             sut = new CheckOutEngine(shippingCalculator, mapper);
-        }
-
-        private Cart createCart(CustomerType type, ShippingMethod method, Address address, params Item[] items)
-        {
-            return new Cart
-            {
-                Id = "1",
-                CustomerId = "customer1",
-                CustomerType = type,
-                ShippingMethod = method,
-                ShippingAddress = address,
-                Items = items.ToList(),
-            };
         }
 
         [Fact]
         public void CalculateTotals_StandardCustomer_NoCustomerDiscount()
         {
-            var cart = createCart(CustomerType.Standard, ShippingMethod.Standard, theSameCity, item1);
+            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Standard, theSameCity, item1);
 
             var actual = sut.CalculateTotals(cart);
 
@@ -74,7 +41,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         [Fact]
         public void CalculateTotals_StandardCustomer_TotalEqualsCostPlusShipping()
         {
-            var cart = createCart(CustomerType.Standard, ShippingMethod.Expedited, theSameCity, item1);
+            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Expedited, theSameCity, item1);
 
             var actual = sut.CalculateTotals(cart);
 
@@ -84,7 +51,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         [Fact]
         public void CalculateTotals_StandardCustomerMoreThanOneItem_TotalEqualsCostPlusShipping()
         {
-            var cart = createCart(CustomerType.Standard, ShippingMethod.Expedited, theSameCity, item1, item2);
+            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Expedited, theSameCity, item1, item2);
 
             var actual = sut.CalculateTotals(cart);
 
@@ -94,7 +61,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         [Fact]
         public void CalculateTotals_PremiumCustomer_HasCustomerDiscount()
         {
-            var cart = createCart(CustomerType.Premium, ShippingMethod.Expedited, theSameCity, item1);
+            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Expedited, theSameCity, item1);
 
             var actual = sut.CalculateTotals(cart);
 
@@ -104,7 +71,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         [Fact]
         public void CalculateTotals_PremiumCustomer_TotalEqualsCostPlusShippingMinusDiscount()
         {
-            var cart = createCart(CustomerType.Premium, ShippingMethod.Express, theSameCity, item1);
+            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Express, theSameCity, item1);
 
             var actual = sut.CalculateTotals(cart);
 
