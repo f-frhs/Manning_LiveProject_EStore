@@ -10,8 +10,8 @@ namespace ShoppingCartServiceTests.BusinessLogic
     public class CheckOutEngineUnitTests
     {
 
-        private Item item1 = TestHelper.CreateItem(1, 1);
-        private Item item2 = TestHelper.CreateItem(2, 2);
+        private Item item1 = TestHelper.CreateItem("_", 100, 1);
+        private Item item2 = TestHelper.CreateItem("_", 200, 2);
 
         private Address warehouseAddress = TestHelper.CreateAddress("USA", "Dallas", "street1");
         private Address theSameCity = TestHelper.CreateAddress("USA", "Dallas", "other street1");

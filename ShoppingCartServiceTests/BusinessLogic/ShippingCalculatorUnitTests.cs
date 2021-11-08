@@ -7,8 +7,8 @@ namespace ShoppingCartServiceTests.BusinessLogic
 {
     public class ShippingCalculatorUnitTests
     {
-        private readonly Item item1 = TestHelper.CreateItem(1, 1);
-        private readonly Item item2 = TestHelper.CreateItem(2, 2);
+        private readonly Item item1 = TestHelper.CreateItem("_", 100, 1);
+        private readonly Item item2 = TestHelper.CreateItem("_", 200, 2);
 
         private readonly Address warehouse = TestHelper.CreateAddress("Country0", "City0", "Street0");
         private readonly Address sameCity = TestHelper.CreateAddress("Country0", "City0", "Street1");
