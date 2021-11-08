@@ -9,8 +9,18 @@ namespace ShoppingCartServiceTests
         private string _city;
         private string _street;
 
-        internal AddressBuilder()
+        private AddressBuilder()
         {
+        }
+
+        internal static AddressBuilder OfDefault()
+        {
+            return new AddressBuilder()
+            {
+                _country = "the country",
+                _city = "the city",
+                _street = "the street",
+            };
         }
 
         internal AddressBuilder(Address address)

@@ -6,11 +6,7 @@ namespace ShoppingCartServiceTests.BusinessLogic.Validation
 {
     public class AddressValidatorUnitTests
     {
-        private static readonly Address ValidAddress = new AddressBuilder()
-            .WithCountry("country")
-            .WithCity("city")
-            .WithStreet("street")
-            .Build();
+        private static readonly Address ValidAddress = AddressBuilder.OfDefault().Build();
 
         [Fact]
         public void IsValid_doesNotHaveCountry_returnFalse()

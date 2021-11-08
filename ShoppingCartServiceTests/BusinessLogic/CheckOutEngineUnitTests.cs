@@ -13,17 +13,13 @@ namespace ShoppingCartServiceTests.BusinessLogic
             .WithPrice(100.0)
             .WithQuantity(1)
             .Build();
+
         private static readonly Item item2 = ItemBuilder.OfDefault()
             .WithPrice(200.0)
             .WithQuantity(2)
             .Build();
 
-        private static readonly Address warehouse = new AddressBuilder()
-            .WithCountry("the Country")
-            .WithCity("the City")
-            .WithStreet("the Street")
-            .Build();
-
+        private static readonly Address warehouse = AddressBuilder.OfDefault().Build();
         private static readonly Address sameCity = new AddressBuilder(warehouse).WithStreet("another Street").Build();
 
         private CheckOutEngine sut;
