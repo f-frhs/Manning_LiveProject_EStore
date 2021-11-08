@@ -4,10 +4,19 @@ namespace ShoppingCartServiceTests
 {
     internal class ItemBuilder
     {
-        private string _productId;
-        private string _productName;
-        private double _price;
-        private uint _quantity;
+        private string _productId = string.Empty;
+        private string _productName = string.Empty;
+        private double _price = 0.0;
+        private uint _quantity = 0;
+
+        private ItemBuilder()
+        {
+        }
+
+        internal static ItemBuilder OfDefault()
+        {
+            return new ItemBuilder();
+        }
 
         internal ItemBuilder WithProductId(string id)
         {

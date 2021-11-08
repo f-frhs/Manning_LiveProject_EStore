@@ -7,15 +7,11 @@ namespace ShoppingCartServiceTests.BusinessLogic
 {
     public class ShippingCalculatorUnitTests
     {
-        private static readonly Item item1 = new ItemBuilder()
-            .WithProductId("pA")
-            .WithProductName("ProductA")
+        private static readonly Item item1 = ItemBuilder.OfDefault()
             .WithPrice(100.0)
             .WithQuantity(1)
             .Build();
-        private static readonly Item item2 = new ItemBuilder()
-            .WithProductId("pB")
-            .WithProductName("ProductB")
+        private static readonly Item item2 = ItemBuilder.OfDefault()
             .WithPrice(200.0)
             .WithQuantity(2)
             .Build(); 
