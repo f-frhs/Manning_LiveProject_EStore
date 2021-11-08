@@ -7,13 +7,13 @@ namespace ShoppingCartServiceTests.BusinessLogic
 {
     public class ShippingCalculatorUnitTests
     {
-        private readonly Item item1 = TestHelper.CreateItem("_", 100, 1);
-        private readonly Item item2 = TestHelper.CreateItem("_", 200, 2);
+        private static readonly Item item1 = TestHelper.CreateItem("_", 100, 1);
+        private static readonly Item item2 = TestHelper.CreateItem("_", 200, 2);
 
-        private readonly Address warehouse = TestHelper.CreateAddress("Country0", "City0", "Street0");
-        private readonly Address sameCity = TestHelper.CreateAddress("Country0", "City0", "Street1");
-        private readonly Address sameCountry = TestHelper.CreateAddress("Country0", "City1", "Street0");
-        private readonly Address anotherCountry = TestHelper.CreateAddress("Country1", "City0", "Street0");
+        private static readonly Address warehouse = TestHelper.CreateAddress("Country0", "City0", "Street0");
+        private static readonly Address sameCity = TestHelper.CreateAddress("Country0", "City0", "Street1");
+        private static readonly Address sameCountry = TestHelper.CreateAddress("Country0", "City1", "Street0");
+        private static readonly Address anotherCountry = TestHelper.CreateAddress("Country1", "City0", "Street0");
 
 
         public ShippingCalculatorUnitTests()
@@ -23,216 +23,85 @@ namespace ShoppingCartServiceTests.BusinessLogic
 
         private readonly ShippingCalculator sut;
 
-        #region combination between area to send and customer type
 
-        [Fact]
-        public void CalculateShippingCost_ToTheSameCityForStandardCustomer_Return1()
+        #region changing customer type and destination
+
+        public static object[][] DataChangingCustomerTypeAndDestination =
         {
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Standard, sameCity, item1);
+            new object[] {01.0, CustomerType.Standard, sameCity},
+            new object[] {02.0, CustomerType.Standard, sameCountry},
+            new object[] {15.0, CustomerType.Standard, anotherCountry},
+            new object[] {01.0, CustomerType.Premium, sameCity},
+            new object[] {02.0, CustomerType.Premium, sameCountry},
+            new object[] {15.0, CustomerType.Premium, anotherCountry},
+        };
+
+        [MemberData(nameof(DataChangingCustomerTypeAndDestination))]
+        [Theory]
+        public void CalculateShippingCost_ChangingCustomerTypeAndDestination(double expected, CustomerType customerType,
+            Address destination)
+        {
+            var cart = TestHelper.CreateCart(customerType, ShippingMethod.Standard, destination, item1);
 
             var actual = sut.CalculateShippingCost(cart);
 
-            Assert.Equal(1, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_ToTheSameCountryForStandardCustomer_Return2()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Standard, sameCountry, item1);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(2, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_ToAnotherCountryForStandardCustomer_Return15()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Standard, anotherCountry, item1);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(15, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_ToTheSameCityForPremiumCustomer_Return1()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Standard, sameCity, item1);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(1, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_ToTheSameCountryForPremiumCustomer_Return2()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Standard, sameCountry, item1);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(2, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_ToAnotherCountryForPremiumCustomer_Return15()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Standard, anotherCountry, item1);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(15, actual);
+            Assert.Equal(expected, actual);
         }
 
         #endregion
 
-        #region combination between shipping method and customer type
+        #region changing customer type and shipping method
 
-        [Fact]
-        public void CalculateShippingCost_ByStandardShippingForStandardCustomer_Return1()
+        public static object[][] DataChangingCustomerTypeAndShippingMethod =
         {
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Standard, sameCity, item1);
+            new object[] {1.0, CustomerType.Standard, ShippingMethod.Standard},
+            new object[] {1.2, CustomerType.Standard, ShippingMethod.Expedited},
+            new object[] {2.0, CustomerType.Standard, ShippingMethod.Priority},
+            new object[] {2.5, CustomerType.Standard, ShippingMethod.Express},
+            new object[] {1.0, CustomerType.Premium, ShippingMethod.Standard},
+            new object[] {1.0, CustomerType.Premium, ShippingMethod.Expedited},
+            new object[] {1.0, CustomerType.Premium, ShippingMethod.Priority},
+            new object[] {2.5, CustomerType.Premium, ShippingMethod.Express},
+        };
+
+        [MemberData(nameof(DataChangingCustomerTypeAndShippingMethod))]
+        [Theory]
+        public void CalculateShippingCost_ChangingCustomerTypeAndShippingMethod(double expected,
+            CustomerType customerType, ShippingMethod shippingMethod)
+        {
+            var cart = TestHelper.CreateCart(customerType, shippingMethod, sameCity, item1);
 
             var actual = sut.CalculateShippingCost(cart);
 
-            Assert.Equal(1, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_ByExpeditedShippingForStandardCustomer_Return1point2()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Expedited, sameCity, item1);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(1.2, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_ByPriorityShippingForStandardCustomer_Return2()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Priority, sameCity, item1);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(2, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_ByExpressShippingForStandardCustomer_Return2point5()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Express, sameCity, item1);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(2.5, actual);
-        }
-
-
-        [Fact]
-        public void CalculateShippingCost_ByStandardShippingForPremiumCustomer_Return1()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Standard, sameCity, item1);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(1, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_ByExpeditedShippingForPremiumCustomer_Return1()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Expedited, sameCity, item1);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(1, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_ByPriorityShippingForPremiumCustomer_Return1()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Priority, sameCity, item1);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(1, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_ByExpressShippingForPremiumCustomer_Return2point5()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Express, sameCity, item1);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(2.5, actual);
+            Assert.Equal(expected, actual);
         }
 
         #endregion
 
-        #region combination between item quantity and customer type
+        #region changing customer type and item quantity
 
-        [Fact]
-        public void CalculateShippingCost_OfNoItemsForStandardCustomer_Return0()
+        public static object[][] DataChangingCustomerTypeAndItemQuantity =
         {
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Standard, sameCity);
+            new object[] {0, CustomerType.Standard, new Item[] { }},
+            new object[] {2, CustomerType.Standard, new[] {item2}},
+            new object[] {3, CustomerType.Standard, new[] {item1, item2}},
+            new object[] {0, CustomerType.Premium, new Item[] { }},
+            new object[] {2, CustomerType.Premium, new[] {item2}},
+            new object[] {3, CustomerType.Premium, new[] {item1, item2}},
+        };
+
+        [MemberData(nameof(DataChangingCustomerTypeAndItemQuantity))]
+        [Theory]
+        public void CalculateShippingCost_ChangingCustomerTypeAndItemQuantity(double expected,
+            CustomerType customerType, Item[] items)
+        {
+            var cart = TestHelper.CreateCart(customerType, ShippingMethod.Standard, sameCity, items);
 
             var actual = sut.CalculateShippingCost(cart);
 
-            Assert.Equal(0, actual);
+            Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void CalculateShippingCost_OfOneItemsForStandardCustomer_Return2()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Standard, sameCity, item2);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(2, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_OfTwoItemsForStandardCustomer_ReturnSumOfQuantities()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Standard, sameCity, item1, item2);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(1 + 2, actual);
-        }
-        
-        [Fact]
-        public void CalculateShippingCost_OfNoItemsForPremiumCustomer_Return0()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Standard, sameCity);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(0, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_OfOneItemsForPremiumCustomer_Return2()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Standard, sameCity, item2);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(2, actual);
-        }
-
-        [Fact]
-        public void CalculateShippingCost_OfTwoItemsForPremiumCustomer_ReturnSumOfQuantities()
-        {
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Standard, sameCity, item1, item2);
-
-            var actual = sut.CalculateShippingCost(cart);
-
-            Assert.Equal(1 + 2, actual);
-        }
         #endregion
 
     }
