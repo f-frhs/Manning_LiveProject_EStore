@@ -1,3 +1,6 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using ShoppingCartService.BusinessLogic;
 using ShoppingCartService.DataAccess.Entities;
@@ -53,40 +56,54 @@ namespace ShoppingCartServiceTests.BusinessLogic
             Assert.Equal(expectedCustomerDiscountPercent, actual.CustomerDiscount);
         }
 
+        public static object[][] DataToCalcTotal =
+        {
+            new object[] {CustomerType.Standard, 0.0, ShippingMethod.Standard, new Item[] { }},
+            new object[] {CustomerType.Standard, 0.0, ShippingMethod.Expedited, new Item[] { }},
+            new object[] {CustomerType.Standard, 0.0, ShippingMethod.Priority, new Item[] { }},
+            new object[] {CustomerType.Standard, 0.0, ShippingMethod.Express, new Item[] { }},
+            new object[] {CustomerType.Standard, 0.0, ShippingMethod.Standard, new[] {item1}},
+            new object[] {CustomerType.Standard, 0.0, ShippingMethod.Expedited, new[] {item1}},
+            new object[] {CustomerType.Standard, 0.0, ShippingMethod.Priority, new[] {item1}},
+            new object[] {CustomerType.Standard, 0.0, ShippingMethod.Express, new[] {item1}},
+            new object[] {CustomerType.Standard, 0.0, ShippingMethod.Standard, new[] {item1, item2}},
+            new object[] {CustomerType.Standard, 0.0, ShippingMethod.Expedited, new[] {item1, item2}},
+            new object[] {CustomerType.Standard, 0.0, ShippingMethod.Priority, new[] {item1, item2}},
+            new object[] {CustomerType.Standard, 0.0, ShippingMethod.Express, new[] {item1, item2}},
 
+            new object[] {CustomerType.Premium, 0.1, ShippingMethod.Standard, new Item[] { }},
+            new object[] {CustomerType.Premium, 0.1, ShippingMethod.Expedited, new Item[] { }},
+            new object[] {CustomerType.Premium, 0.1, ShippingMethod.Priority, new Item[] { }},
+            new object[] {CustomerType.Premium, 0.1, ShippingMethod.Express, new Item[] { }},
+            new object[] {CustomerType.Premium, 0.1, ShippingMethod.Standard, new[] {item1}},
+            new object[] {CustomerType.Premium, 0.1, ShippingMethod.Expedited, new[] {item1}},
+            new object[] {CustomerType.Premium, 0.1, ShippingMethod.Priority, new[] {item1}},
+            new object[] {CustomerType.Premium, 0.1, ShippingMethod.Express, new[] {item1}},
+            new object[] {CustomerType.Premium, 0.1, ShippingMethod.Standard, new[] {item1, item2}},
+            new object[] {CustomerType.Premium, 0.1, ShippingMethod.Expedited, new[] {item1, item2}},
+            new object[] {CustomerType.Premium, 0.1, ShippingMethod.Priority, new[] {item1, item2}},
+            new object[] {CustomerType.Premium, 0.1, ShippingMethod.Express, new[] {item1, item2}},
+            new object[] {CustomerType.Premium, 0.1, ShippingMethod.Expedited, new[] {item1, item2}},
+        };
 
-        [Fact]
-        public void CalculateTotals_StandardCustomer_TotalEqualsCostPlusShipping()
+        [MemberData(nameof(DataToCalcTotal))]
+        [Theory]
+        public void CalculateTotals_EqualsCostPlusShippingMinusDiscount(
+            CustomerType customerType,
+            double discountFraction,
+            ShippingMethod shippingMethod,
+            params Item[] items)
         {
             var sut = new CheckOutEngine(new ShippingCalculator(warehouse), _mapper);
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Expedited, sameCity, item1);
+            var cart = TestHelper.CreateCart(customerType, shippingMethod, sameCity, items);
 
             var actual = sut.CalculateTotals(cart);
 
-            Assert.Equal(100 + 1 * 1.2, actual.Total);
+            var cost = cart.Items.Sum(i => i.Price * i.Quantity);
+            var shipping = actual.ShippingCost;
+            var discount = (cost + shipping) * discountFraction;
+            var expected = cost + shipping - discount;
+            Assert.Equal(expected, actual.Total);
         }
-
-        [Fact]
-        public void CalculateTotals_StandardCustomerMoreThanOneItem_TotalEqualsCostPlusShipping()
-        {
-            var sut = new CheckOutEngine(new ShippingCalculator(warehouse), _mapper);
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Expedited, sameCity, item1, item2);
-
-            var actual = sut.CalculateTotals(cart);
-
-            Assert.Equal((100 * 1 + 200 * 2) + (1 + 2) * 1.2, actual.Total);
-        }
-
-        [Fact]
-        public void CalculateTotals_PremiumCustomer_TotalEqualsCostPlusShippingMinusDiscount()
-        {
-            var sut = new CheckOutEngine(new ShippingCalculator(warehouse), _mapper);
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Express, sameCity, item1);
-
-            var actual = sut.CalculateTotals(cart);
-
-            Assert.Equal((100 + 1 * 2.5) * (1 - 0.1), actual.Total);
-        }
-
     }
 }
