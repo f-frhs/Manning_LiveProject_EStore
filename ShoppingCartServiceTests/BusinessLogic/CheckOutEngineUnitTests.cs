@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using ShoppingCartService.BusinessLogic;
 using ShoppingCartService.DataAccess.Entities;
 using ShoppingCartService.Mapping;
@@ -33,16 +33,27 @@ namespace ShoppingCartServiceTests.BusinessLogic
         private static readonly Address warehouse = AddressBuilder.OfDefault().Build();
         private static readonly Address sameCity = new AddressBuilder(warehouse).WithStreet("another Street").Build();
 
-        [Fact]
-        public void CalculateTotals_StandardCustomer_NoCustomerDiscount()
+
+        public static object[][] DataCustomerDiscountPercent =
+        {
+            new object[] {CustomerType.Standard, 0},
+            new object[] {CustomerType.Premium, 10},
+        };
+
+        [Theory]
+        [MemberData(nameof(DataCustomerDiscountPercent))]
+        public void CalculateTotals_CheckoutDtoHasCustomerDiscountPercent(CustomerType customerType,
+            double expectedCustomerDiscountPercent)
         {
             var sut = new CheckOutEngine(new ShippingCalculator(warehouse), _mapper);
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Standard, sameCity, item1);
+            var cart = TestHelper.CreateCart(customerType, ShippingMethod.Standard, sameCity, item1);
 
             var actual = sut.CalculateTotals(cart);
 
-            Assert.Equal(101, actual.Total);
+            Assert.Equal(expectedCustomerDiscountPercent, actual.CustomerDiscount);
         }
+
+
 
         [Fact]
         public void CalculateTotals_StandardCustomer_TotalEqualsCostPlusShipping()
@@ -64,17 +75,6 @@ namespace ShoppingCartServiceTests.BusinessLogic
             var actual = sut.CalculateTotals(cart);
 
             Assert.Equal((100 * 1 + 200 * 2) + (1 + 2) * 1.2, actual.Total);
-        }
-
-        [Fact]
-        public void CalculateTotals_PremiumCustomer_HasCustomerDiscount()
-        {
-            var sut = new CheckOutEngine(new ShippingCalculator(warehouse), _mapper);
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Expedited, sameCity, item1);
-
-            var actual = sut.CalculateTotals(cart);
-
-            Assert.Equal((100 + 1 * 1) * (1 - 0.1), actual.Total);
         }
 
         [Fact]
