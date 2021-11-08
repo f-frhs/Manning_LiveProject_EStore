@@ -1,15 +1,21 @@
-using System;
 using Xunit;
 using ShoppingCartService.BusinessLogic.Validation;
+using ShoppingCartService.Models;
 
 namespace ShoppingCartServiceTests.BusinessLogic.Validation
 {
     public class AddressValidatorUnitTests
     {
+        private static readonly Address ValidAddress = new AddressBuilder()
+            .WithCountry("country")
+            .WithCity("city")
+            .WithStreet("street")
+            .Build();
+
         [Fact]
         public void IsValid_doesNotHaveCountry_returnFalse()
         {
-            var address = TestHelper.CreateAddress(null, "city", "street");
+            var address = new AddressBuilder(ValidAddress).WithCountry(null).Build();
             var sut = new AddressValidator();
 
             var isValid = sut.IsValid(address);
@@ -20,7 +26,7 @@ namespace ShoppingCartServiceTests.BusinessLogic.Validation
         [Fact]
         public void IsValid_doesNotHaveCity_returnFalse()
         {
-            var address = TestHelper.CreateAddress("country", null, "street");
+            var address = new AddressBuilder(ValidAddress).WithCity(null).Build();
             var sut = new AddressValidator();
 
             var isValid = sut.IsValid(address);
@@ -31,7 +37,7 @@ namespace ShoppingCartServiceTests.BusinessLogic.Validation
         [Fact]
         public void IsValid_doesNotHaveStreet_returnFalse()
         {
-            var address = TestHelper.CreateAddress("country", "city", null);
+            var address = new AddressBuilder(ValidAddress).WithStreet(null).Build();
             var sut = new AddressValidator();
 
             var isValid = sut.IsValid(address);
@@ -42,7 +48,7 @@ namespace ShoppingCartServiceTests.BusinessLogic.Validation
         [Fact]
         public void IsValid_validValues_returnTrue()
         {
-            var address = TestHelper.CreateAddress("country", "city", "street");
+            var address = ValidAddress;
             var sut = new AddressValidator();
 
             var isValid = sut.IsValid(address);

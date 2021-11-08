@@ -13,10 +13,13 @@ namespace ShoppingCartServiceTests.BusinessLogic
         private Item item1 = TestHelper.CreateItem("_", 100, 1);
         private Item item2 = TestHelper.CreateItem("_", 200, 2);
 
-        private Address warehouseAddress = TestHelper.CreateAddress("USA", "Dallas", "street1");
-        private Address theSameCity = TestHelper.CreateAddress("USA", "Dallas", "other street1");
-        private Address theSameCountry = TestHelper.CreateAddress("USA", "Other city", "other street");
-        private Address otherCountry = TestHelper.CreateAddress("Other country", "Other city", "other street");
+        private static readonly Address warehouse = new AddressBuilder()
+            .WithCountry("the Country")
+            .WithCity("the City")
+            .WithStreet("the Street")
+            .Build();
+
+        private static readonly Address sameCity = new AddressBuilder(warehouse).WithStreet("another Street").Build();
 
         private CheckOutEngine sut;
 
@@ -24,14 +27,14 @@ namespace ShoppingCartServiceTests.BusinessLogic
         {
             var config = new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile()));
             var mapper = config.CreateMapper();
-            var shippingCalculator = new ShippingCalculator(warehouseAddress);
+            var shippingCalculator = new ShippingCalculator(warehouse);
             sut = new CheckOutEngine(shippingCalculator, mapper);
         }
 
         [Fact]
         public void CalculateTotals_StandardCustomer_NoCustomerDiscount()
         {
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Standard, theSameCity, item1);
+            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Standard, sameCity, item1);
 
             var actual = sut.CalculateTotals(cart);
 
@@ -41,7 +44,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         [Fact]
         public void CalculateTotals_StandardCustomer_TotalEqualsCostPlusShipping()
         {
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Expedited, theSameCity, item1);
+            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Expedited, sameCity, item1);
 
             var actual = sut.CalculateTotals(cart);
 
@@ -51,7 +54,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         [Fact]
         public void CalculateTotals_StandardCustomerMoreThanOneItem_TotalEqualsCostPlusShipping()
         {
-            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Expedited, theSameCity, item1, item2);
+            var cart = TestHelper.CreateCart(CustomerType.Standard, ShippingMethod.Expedited, sameCity, item1, item2);
 
             var actual = sut.CalculateTotals(cart);
 
@@ -61,7 +64,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         [Fact]
         public void CalculateTotals_PremiumCustomer_HasCustomerDiscount()
         {
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Expedited, theSameCity, item1);
+            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Expedited, sameCity, item1);
 
             var actual = sut.CalculateTotals(cart);
 
@@ -71,7 +74,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         [Fact]
         public void CalculateTotals_PremiumCustomer_TotalEqualsCostPlusShippingMinusDiscount()
         {
-            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Express, theSameCity, item1);
+            var cart = TestHelper.CreateCart(CustomerType.Premium, ShippingMethod.Express, sameCity, item1);
 
             var actual = sut.CalculateTotals(cart);
 

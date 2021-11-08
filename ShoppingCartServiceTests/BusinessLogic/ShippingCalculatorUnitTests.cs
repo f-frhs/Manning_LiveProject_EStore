@@ -10,18 +10,17 @@ namespace ShoppingCartServiceTests.BusinessLogic
         private static readonly Item item1 = TestHelper.CreateItem("_", 100, 1);
         private static readonly Item item2 = TestHelper.CreateItem("_", 200, 2);
 
-        private static readonly Address warehouse = TestHelper.CreateAddress("Country0", "City0", "Street0");
-        private static readonly Address sameCity = TestHelper.CreateAddress("Country0", "City0", "Street1");
-        private static readonly Address sameCountry = TestHelper.CreateAddress("Country0", "City1", "Street0");
-        private static readonly Address anotherCountry = TestHelper.CreateAddress("Country1", "City0", "Street0");
+        private static readonly Address warehouse = new AddressBuilder()
+            .WithCountry("the Country")
+            .WithCity("the City")
+            .WithStreet("the Street")
+            .Build();
 
+        private static readonly Address sameCity = new AddressBuilder(warehouse).WithStreet("another Street").Build();
+        private static readonly Address sameCountry = new AddressBuilder(warehouse).WithCity("another City").Build();
 
-        public ShippingCalculatorUnitTests()
-        {
-            sut = new ShippingCalculator(warehouse);
-        }
-
-        private readonly ShippingCalculator sut;
+        private static readonly Address anotherCountry = new AddressBuilder(warehouse)
+            .WithCountry("another Country").Build();
 
 
         #region changing customer type and destination
@@ -42,6 +41,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
             Address destination)
         {
             var cart = TestHelper.CreateCart(customerType, ShippingMethod.Standard, destination, item1);
+            var sut = new ShippingCalculator(warehouse);
 
             var actual = sut.CalculateShippingCost(cart);
 
@@ -70,6 +70,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
             CustomerType customerType, ShippingMethod shippingMethod)
         {
             var cart = TestHelper.CreateCart(customerType, shippingMethod, sameCity, item1);
+            var sut = new ShippingCalculator(warehouse);
 
             var actual = sut.CalculateShippingCost(cart);
 
@@ -96,6 +97,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
             CustomerType customerType, Item[] items)
         {
             var cart = TestHelper.CreateCart(customerType, ShippingMethod.Standard, sameCity, items);
+            var sut = new ShippingCalculator(warehouse);
 
             var actual = sut.CalculateShippingCost(cart);
 

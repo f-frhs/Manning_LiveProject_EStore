@@ -21,16 +21,6 @@ namespace ShoppingCartServiceTests
             };
         }
 
-        public static Address CreateAddress(string country, string city, string street)
-        {
-            return new Address
-            {
-                Country = country,
-                City = city,
-                Street = street,
-            };
-        }
-
         public static Cart CreateCart(CustomerType type, ShippingMethod method, Address address, params Item[] items)
         {
             return new Cart
