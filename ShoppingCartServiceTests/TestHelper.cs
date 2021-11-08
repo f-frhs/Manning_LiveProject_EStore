@@ -7,20 +7,6 @@ namespace ShoppingCartServiceTests
 {
     public class TestHelper
     {
-        public static Item CreateItem(string name, uint price, uint quantity)
-        {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException(nameof(name), "Cannot be null nor string.empty.");
-
-            return new Item
-            {
-                ProductId = $"p{name}",
-                ProductName = $"product{name}",
-                Price = price,
-                Quantity = quantity,
-            };
-        }
-
         public static Cart CreateCart(CustomerType type, ShippingMethod method, Address address, params Item[] items)
         {
             return new Cart
