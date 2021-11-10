@@ -11,7 +11,8 @@ using Xunit;
 
 namespace ShoppingCartServiceTests.DataAccess
 {
-    public class ShoppingCartRepositoryIntegrationTests :IClassFixture<DockerMongoFixtures>, IDisposable
+    [Collection("Dockerized MongoDB collection")]
+    public class ShoppingCartRepositoryIntegrationTests : IDisposable
     {
         private readonly ShoppingCartDatabaseSettings _databaseSettings;
 
