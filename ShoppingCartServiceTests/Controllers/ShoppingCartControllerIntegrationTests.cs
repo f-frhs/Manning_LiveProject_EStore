@@ -102,6 +102,7 @@ namespace ShoppingCartServiceTests.Controllers
         {
             var repo = new ShoppingCartRepository(_databaseSetting);
             var theCart = TestHelper.CreateCartOfDefault();
+            theCart.Items = new List<Item> {ItemBuilder.OfDefault().WithPrice(100).WithQuantity(1).Build()};
             repo.Create(theCart);
             var sut = createShoppingCartController(repo);
 
@@ -109,6 +110,7 @@ namespace ShoppingCartServiceTests.Controllers
 
             Assert.Null(actual.Result);
             Assert.NotNull(actual.Value);
+            Assert.NotEqual(0.0, actual.Value.Total);
         }
 
         [Fact]
