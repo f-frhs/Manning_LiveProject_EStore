@@ -4,9 +4,15 @@ using ShoppingCartService.Controllers.Models;
 
 namespace ShoppingCartService.Models
 {
-    public class TypeAbsoluteCoupon :ICoupon
+    public class TypeAbsoluteCoupon : CouponBase
     {
         public TypeAbsoluteCoupon(double amount)
+            : this(amount, DateTime.Today.AddYears(1))
+        {
+        }
+
+        public TypeAbsoluteCoupon(double amount, DateTime expiredAt)
+            : base(expiredAt)
         {
             setAmount(amount);
         }
@@ -24,7 +30,7 @@ namespace ShoppingCartService.Models
             Amount = amount;
         }
 
-        public double CalcAmount(CheckoutDto checkoutDto)
+        public override double CalcAmount(CheckoutDto checkoutDto)
         {
             return Amount;
         }

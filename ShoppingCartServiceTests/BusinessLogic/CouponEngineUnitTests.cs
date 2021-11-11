@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using ShoppingCartService.BusinessLogic;
 using ShoppingCartService.BusinessLogic.Exceptions;
 using ShoppingCartService.Controllers.Models;
@@ -94,6 +95,102 @@ namespace ShoppingCartServiceTests.BusinessLogic
             var actual = sut.CalculateDiscount(checkoutDto, coupon);
 
             Assert.Equal(shippingCost, actual);
+        }
+
+        [InlineData(6)]
+        [InlineData(7)]
+        [Theory]
+        public void CalculateDiscount_InvalidFreeShippingCoupon_ThrowInvalidCouponException(uint day)
+        {
+            var expiredAt = new DateTime(2021, 11, (int) day);
+            var today = new DateTime(2021, 11, 8);
+
+            var checkoutDto = createCheckoutDto(shippingCost: 1, total: 10);
+            var coupon = new FreeShippingCoupon(expiredAt);
+            var sut = new CouponEngine();
+
+            Assert.Throws<InvalidCouponException>(() => sut.CalculateDiscount(checkoutDto, coupon, today));
+        }
+
+        [InlineData(8)]
+        [InlineData(9)]
+        [Theory]
+        public void CalculateDiscount_ValidFreeShippingCoupon_ReturnDiscount(uint day)
+        {
+            var expiredAt = new DateTime(2021, 11, (int)day);
+            var today = new DateTime(2021, 11, 8);
+
+            var checkoutDto = createCheckoutDto(shippingCost: 1, total: 10);
+            var coupon = new FreeShippingCoupon(expiredAt);
+            var sut = new CouponEngine();
+
+            var actual = sut.CalculateDiscount(checkoutDto, coupon, today);
+
+            Assert.Equal(1, actual);
+        }
+
+        [InlineData(6)]
+        [InlineData(7)]
+        [Theory]
+        public void CalculateDiscount_InvalidTypeAbsoluteCoupon_ThrowInvalidCouponException(uint day)
+        {
+            var expiredAt = new DateTime(2021, 11, (int)day);
+            var today = new DateTime(2021, 11, 8);
+
+            var checkoutDto = createCheckoutDto(total: 10);
+            var coupon = new TypeAbsoluteCoupon(1, expiredAt);
+            var sut = new CouponEngine();
+
+            Assert.Throws<InvalidCouponException>(() => sut.CalculateDiscount(checkoutDto, coupon, today));
+        }
+
+        [InlineData(8)]
+        [InlineData(9)]
+        [Theory]
+        public void CalculateDiscount_ValidTypeAbsoluteCoupon_ReturnDiscount(uint day)
+        {
+            var expiredAt = new DateTime(2021, 11, (int)day);
+            var today = new DateTime(2021, 11, 8);
+
+            var checkoutDto = createCheckoutDto(total: 10);
+            var coupon = new TypeAbsoluteCoupon(1, expiredAt);
+            var sut = new CouponEngine();
+
+            var actual = sut.CalculateDiscount(checkoutDto, coupon, today);
+
+            Assert.Equal(1, actual);
+        }
+
+        [InlineData(6)]
+        [InlineData(7)]
+        [Theory]
+        public void CalculateDiscount_InvalidTypePercentageCoupon_ThrowInvalidCouponException(uint day)
+        {
+            var expiredAt = new DateTime(2021, 11, (int)day);
+            var today = new DateTime(2021, 11, 8);
+
+            var checkoutDto = createCheckoutDto(total: 10);
+            var coupon = new TypePercentageCoupon(1, expiredAt);
+            var sut = new CouponEngine();
+
+            Assert.Throws<InvalidCouponException>(() => sut.CalculateDiscount(checkoutDto, coupon, today));
+        }
+
+        [InlineData(8)]
+        [InlineData(9)]
+        [Theory]
+        public void CalculateDiscount_ValidTypePercentageCoupon_ReturnDiscount(uint day)
+        {
+            var expiredAt = new DateTime(2021, 11, (int)day);
+            var today = new DateTime(2021, 11, 8);
+
+            var checkoutDto = createCheckoutDto(total: 10);
+            var coupon = new TypePercentageCoupon(1, expiredAt);
+            var sut = new CouponEngine();
+
+            var actual = sut.CalculateDiscount(checkoutDto, coupon, today);
+
+            Assert.Equal(0.1, actual);
         }
     }
 }
