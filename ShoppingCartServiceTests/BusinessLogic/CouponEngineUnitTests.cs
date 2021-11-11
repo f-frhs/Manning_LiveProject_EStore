@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ShoppingCartService.BusinessLogic;
+using ShoppingCartService.BusinessLogic.Exceptions;
 using ShoppingCartService.Controllers.Models;
 using ShoppingCartService.Mapping;
 using ShoppingCartService.Models;
@@ -32,6 +33,18 @@ namespace ShoppingCartServiceTests.BusinessLogic
             var actual = sut.CalculateDiscount(checkoutDto, coupon);
 
             Assert.Equal(amount, actual);
+        }
+
+        [InlineData(11)]
+        [InlineData(12)]
+        [Theory]
+        public void CalculateDiscount_CouponAmountIsMoreThanTotalCartAmount_ThrowInvalidCouponException(uint amount)
+        {
+            var checkoutDto = new CheckoutDto(new ShoppingCartDto(), 0, 0, 10);
+            var coupon = new Coupon(amount);
+            var sut = new CouponEngine();
+
+            Assert.Throws<InvalidCouponException>(() => sut.CalculateDiscount(checkoutDto, coupon));
         }
     }
 }
