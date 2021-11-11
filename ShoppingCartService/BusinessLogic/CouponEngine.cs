@@ -7,7 +7,12 @@ namespace ShoppingCartService.BusinessLogic
     {
         public double CalculateDiscount(CheckoutDto checkoutDto, Coupon coupon)
         {
-            return 0;
+            if (coupon == null)
+            {
+                return 0;
+            }
+
+            return 10;
         }
     }
 }
