@@ -21,6 +21,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         }
 
         [InlineData(10)]
+        [InlineData(11)]  // to fail
         [Theory]
         public void CalculateDiscount_CouponOfAbsoluteType_ReturnAmount(uint amount)
         {
