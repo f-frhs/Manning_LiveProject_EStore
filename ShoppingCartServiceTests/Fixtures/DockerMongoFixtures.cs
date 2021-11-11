@@ -18,7 +18,7 @@ namespace ShoppingCartServiceTests.Fixtures
         private readonly string _connectionString = "mongodb://localhost:1111";
         internal IMapper Mapper { get; }
 
-        public ShoppingCartDatabaseSettings GetDatabaseSettings(
+        public DatabaseSettings GetDatabaseSettings(
             [NotNull] string collectionName,
             [NotNull] string databaseName
         ) => new()

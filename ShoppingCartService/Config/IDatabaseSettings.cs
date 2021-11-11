@@ -1,6 +1,6 @@
 ﻿namespace ShoppingCartService.Config
 {
-    public interface IShoppingCartDatabaseSettings
+    public interface IDatabaseSettings
     {
         string CollectionName { get; }
         string ConnectionString { get; }

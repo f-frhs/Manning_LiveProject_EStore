@@ -14,7 +14,7 @@ namespace ShoppingCartServiceTests.DataAccess
     [Collection("Dockerized MongoDB collection")]
     public class ShoppingCartRepositoryIntegrationTests : IDisposable
     {
-        private readonly ShoppingCartDatabaseSettings _databaseSettings;
+        private readonly DatabaseSettings _databaseSettings;
 
         public ShoppingCartRepositoryIntegrationTests(DockerMongoFixtures fixture)
         {

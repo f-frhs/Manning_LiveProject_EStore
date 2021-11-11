@@ -27,11 +27,11 @@ namespace ShoppingCartService
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<ShoppingCartDatabaseSettings>(
-                Configuration.GetSection(nameof(ShoppingCartDatabaseSettings)));
+            services.Configure<DatabaseSettings>(
+                Configuration.GetSection(nameof(DatabaseSettings)));
 
-            services.AddSingleton<IShoppingCartDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<ShoppingCartDatabaseSettings>>().Value);
+            services.AddSingleton<IDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
             services.AddSingleton<IShoppingCartRepository, ShoppingCartRepository>();
             services.AddSingleton<IAddressValidator, AddressValidator>();

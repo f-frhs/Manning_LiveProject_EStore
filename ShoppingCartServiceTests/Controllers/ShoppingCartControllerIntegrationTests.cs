@@ -23,7 +23,7 @@ namespace ShoppingCartServiceTests.Controllers
     [Collection("Dockerized MongoDB collection")]
     public class ShoppingCartControllerIntegrationTests : IDisposable
     {
-        private readonly ShoppingCartDatabaseSettings _databaseSetting;
+        private readonly DatabaseSettings _databaseSetting;
         private readonly IMapper _mapper;
 
         public ShoppingCartControllerIntegrationTests(DockerMongoFixtures fixture)

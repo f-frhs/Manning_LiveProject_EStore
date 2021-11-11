@@ -1,6 +1,6 @@
 ﻿namespace ShoppingCartService.Config
 {
-    public class ShoppingCartDatabaseSettings : IShoppingCartDatabaseSettings
+    public class DatabaseSettings : IDatabaseSettings
     {
         public string CollectionName { get; set; }
         public string ConnectionString { get; set; }

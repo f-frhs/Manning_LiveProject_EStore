@@ -11,7 +11,7 @@ namespace ShoppingCartService.DataAccess
     {
         private readonly IMongoCollection<Cart> _carts;
 
-        public ShoppingCartRepository(IShoppingCartDatabaseSettings settings)
+        public ShoppingCartRepository(IDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
