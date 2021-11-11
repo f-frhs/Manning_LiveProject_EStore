@@ -12,7 +12,7 @@ namespace ShoppingCartService.BusinessLogic
                 return 0;
             }
 
-            return 10;
+            return coupon.Amount;
         }
     }
 }
