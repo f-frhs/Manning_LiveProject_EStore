@@ -36,7 +36,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         public void CalculateDiscount_CouponOfAbsoluteType_ReturnAmount(uint amount)
         {
             var checkoutDto = createCheckoutDto(total: 10);
-            var coupon = new Coupon(amount);
+            var coupon = new TypeAbsoluteCoupon(amount);
             var sut = new CouponEngine();
 
             var actual = sut.CalculateDiscount(checkoutDto, coupon);
@@ -50,7 +50,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         public void CalculateDiscount_CouponAmountIsMoreThanTotalCartAmount_ThrowInvalidCouponException(uint amount)
         {
             var checkoutDto = createCheckoutDto(total: 10);
-            var coupon = new Coupon(amount);
+            var coupon = new TypeAbsoluteCoupon(amount);
             var sut = new CouponEngine();
 
             Assert.Throws<InvalidCouponException>(() => sut.CalculateDiscount(checkoutDto, coupon));
@@ -63,7 +63,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         public void CalculateDiscount_CouponOfPercentageType_EqualTotalTimesPercentage(double percentage)
         {
             var checkoutDto = createCheckoutDto(total: 100);
-            var coupon = new Coupon(percentage, ECouponType.Percentage);
+            var coupon = new TypePercentageCoupon(percentage);
             var sut = new CouponEngine();
 
             var actual = sut.CalculateDiscount(checkoutDto, coupon);
@@ -77,7 +77,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         {
             var target = new CouponEngine();
 
-            var actual = target.CalculateDiscount(createCheckoutDto(total: 10), new Coupon(50, ECouponType.Percentage));
+            var actual = target.CalculateDiscount(createCheckoutDto(total: 10), new TypePercentageCoupon(50));
 
             Assert.Equal(5, actual);
         }

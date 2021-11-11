@@ -4,7 +4,7 @@ using Xunit;
 
 namespace ShoppingCartServiceTests.Models
 {
-    public class CouponUnitTests
+    public class TypeAbsoluteCouponUnitTests
     {
         [InlineData(0)]
         [InlineData(1)]
@@ -12,7 +12,7 @@ namespace ShoppingCartServiceTests.Models
         [Theory]
         public void Ctor_ValidAmount_Pass(double amount)
         {
-            new Coupon(amount);
+            new TypeAbsoluteCoupon(amount);
         }
 
         [InlineData(-1.1)]
@@ -20,9 +20,12 @@ namespace ShoppingCartServiceTests.Models
         [Theory]
         public void Ctor_InvalidAmount_ThrowArgumentOutOfRangeException(double amount)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new Coupon(amount));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new TypeAbsoluteCoupon(amount));
         }
+    }
 
+    public class TypePercentageCouponUnitTests
+    {
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(1.1)]
@@ -31,7 +34,7 @@ namespace ShoppingCartServiceTests.Models
         [Theory]
         public void Ctor_ValidPercentage_Pass(double percentage)
         {
-            new Coupon(percentage, ECouponType.Percentage);
+            new TypePercentageCoupon(percentage);
         }
 
         [InlineData(-1.1)]
@@ -42,7 +45,7 @@ namespace ShoppingCartServiceTests.Models
         public void Ctor_InvalidPercentage_ThrowArgumentOutOfRangeException(double percentage)
         {
             Assert.Throws<ArgumentOutOfRangeException>(
-                () => new Coupon(percentage, ECouponType.Percentage));
+                () => new TypePercentageCoupon(percentage));
         }
     }
 }
