@@ -18,7 +18,7 @@ namespace ShoppingCartServiceTests.DataAccess
 
         public ShoppingCartRepositoryIntegrationTests(DockerMongoFixtures fixture)
         {
-            _databaseSettings = fixture.GetDatabaseSettings();
+            _databaseSettings = fixture.GetDatabaseSettings("ShoppingCart", "ShoppingCartDb");
         }
 
         public void Dispose()

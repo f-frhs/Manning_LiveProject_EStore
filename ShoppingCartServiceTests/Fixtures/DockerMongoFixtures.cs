@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,11 +18,14 @@ namespace ShoppingCartServiceTests.Fixtures
         private readonly string _connectionString = "mongodb://localhost:1111";
         internal IMapper Mapper { get; }
 
-        public ShoppingCartDatabaseSettings GetDatabaseSettings() => new()
+        public ShoppingCartDatabaseSettings GetDatabaseSettings(
+            [NotNull] string collectionName,
+            [NotNull] string databaseName
+        ) => new()
         {
-            CollectionName = "ShoppingCart",
+            CollectionName = collectionName,
             ConnectionString = _connectionString,
-            DatabaseName = "ShoppingCartDb",
+            DatabaseName = databaseName,
         };
 
         public DockerMongoFixtures()

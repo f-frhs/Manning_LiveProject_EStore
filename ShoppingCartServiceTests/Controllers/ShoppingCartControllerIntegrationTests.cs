@@ -28,7 +28,7 @@ namespace ShoppingCartServiceTests.Controllers
 
         public ShoppingCartControllerIntegrationTests(DockerMongoFixtures fixture)
         {
-            _databaseSetting = fixture.GetDatabaseSettings();
+            _databaseSetting = fixture.GetDatabaseSettings("ShoppingCart", "ShoppingCartDb");
             _mapper = fixture.Mapper;
         }
 
