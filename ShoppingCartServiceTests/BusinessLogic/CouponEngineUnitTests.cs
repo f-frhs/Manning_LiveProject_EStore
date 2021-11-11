@@ -13,7 +13,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         [Fact]
         public void CalculateDiscount_CouponEqualsNull_Return0()
         {
-            var checkoutDto = new CheckoutDto(new ShoppingCartDto(), 0, 0, 0);
+            var checkoutDto = createCheckoutDto();
             var sut = new CouponEngine();
 
             var actual = sut.CalculateDiscount(checkoutDto, null);
@@ -21,12 +21,21 @@ namespace ShoppingCartServiceTests.BusinessLogic
             Assert.Equal(0, actual);
         }
 
+        private static CheckoutDto createCheckoutDto(
+            ShoppingCartDto shoppingCartDto = null,
+            double shippingCost = 0,
+            double customerDiscount = 0,
+            double total = 0)
+        {
+            return new CheckoutDto(shoppingCartDto ?? new ShoppingCartDto(), shippingCost, customerDiscount, total);
+        }
+
         [InlineData(09)]
         [InlineData(10)]
         [Theory]
         public void CalculateDiscount_CouponOfAbsoluteType_ReturnAmount(uint amount)
         {
-            var checkoutDto = new CheckoutDto(new ShoppingCartDto(), 0, 0, 10);
+            var checkoutDto = createCheckoutDto(total: 10);
             var coupon = new Coupon(amount);
             var sut = new CouponEngine();
 
@@ -40,7 +49,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         [Theory]
         public void CalculateDiscount_CouponAmountIsMoreThanTotalCartAmount_ThrowInvalidCouponException(uint amount)
         {
-            var checkoutDto = new CheckoutDto(new ShoppingCartDto(), 0, 0, 10);
+            var checkoutDto = createCheckoutDto(total: 10);
             var coupon = new Coupon(amount);
             var sut = new CouponEngine();
 
