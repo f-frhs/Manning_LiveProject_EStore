@@ -7,7 +7,7 @@ namespace ShoppingCartService.BusinessLogic
     {
         public double CalculateDiscount(CheckoutDto checkoutDto, Coupon coupon)
         {
-            throw new System.NotImplementedException();
+            return 0;
         }
     }
 }
