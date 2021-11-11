@@ -70,5 +70,16 @@ namespace ShoppingCartServiceTests.BusinessLogic
 
             Assert.Equal(checkoutDto.Total * percentage / 100.0, actual);
         }
+
+        // given hint 3 at https://liveproject.manning.com/module/283_5_1/unit-and-integration-tests/4--add-new-functionality-guided-by-tests-%28tdd%29/4-1-workflow%3a-add-new-functionality-guided-by-tests-%28tdd%29?
+        [Fact]
+        public void CalculateDiscount_CouponOfTypePercentageAndHigherThanAmount_DoNotThrowInvalidCouponException()
+        {
+            var target = new CouponEngine();
+
+            var actual = target.CalculateDiscount(createCheckoutDto(total: 10), new Coupon(50, ECouponType.Percentage));
+
+            Assert.Equal(5, actual);
+        }
     }
 }
