@@ -3,7 +3,7 @@ using ShoppingCartService.Controllers.Models;
 
 namespace ShoppingCartService.Models
 {
-    public class TypePercentageCoupon : CouponBase
+    public class TypePercentageCoupon : CouponBase, IEquatable<TypePercentageCoupon>
     {
         public TypePercentageCoupon(double percentage)
             : this(percentage, DateTime.Today.AddYears(1))
@@ -39,6 +39,20 @@ namespace ShoppingCartService.Models
         public override double CalcAmount(CheckoutDto checkoutDto)
         {
             return checkoutDto.Total * Percentage / 100.0;
+        }
+
+        public bool Equals(TypePercentageCoupon other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            if (other.GetType() != this.GetType()) return false;
+            return Id == other.Id
+                   && ExpiredAt == other.ExpiredAt;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, ExpiredAt, Percentage);
         }
     }
 }

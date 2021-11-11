@@ -4,7 +4,7 @@ using ShoppingCartService.Controllers.Models;
 
 namespace ShoppingCartService.Models
 {
-    public class TypeAbsoluteCoupon : CouponBase
+    public class TypeAbsoluteCoupon : CouponBase, IEquatable<TypeAbsoluteCoupon>
     {
         public TypeAbsoluteCoupon(double amount)
             : this(amount, DateTime.Today.AddYears(1))
@@ -17,7 +17,7 @@ namespace ShoppingCartService.Models
             setAmount(amount);
         }
 
-        public double Amount { get; private set; }
+        public double Amount { get; set; }
 
         private void setAmount(double amount)
         {
@@ -33,6 +33,20 @@ namespace ShoppingCartService.Models
         public override double CalcAmount(CheckoutDto checkoutDto)
         {
             return Amount;
+        }
+
+        public bool Equals(TypeAbsoluteCoupon other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            if (other.GetType() != this.GetType()) return false;
+            return Id == other.Id
+                   && ExpiredAt == other.ExpiredAt;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, ExpiredAt, Amount);
         }
     }
 }
