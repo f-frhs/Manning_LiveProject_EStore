@@ -81,5 +81,19 @@ namespace ShoppingCartServiceTests.BusinessLogic
 
             Assert.Equal(5, actual);
         }
+
+        [InlineData(1)]
+        [InlineData(2)]
+        [Theory]
+        public void CalculateDiscount_FreeShippingCoupon_EqualShippingCost(double shippingCost)
+        {
+            var checkoutDto = createCheckoutDto(shippingCost: shippingCost, total:10);
+            var coupon = new FreeShippingCoupon();
+            var sut = new CouponEngine();
+
+            var actual = sut.CalculateDiscount(checkoutDto, coupon);
+
+            Assert.Equal(shippingCost, actual);
+        }
     }
 }
