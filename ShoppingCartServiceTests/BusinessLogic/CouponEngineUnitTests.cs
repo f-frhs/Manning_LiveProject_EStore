@@ -21,12 +21,12 @@ namespace ShoppingCartServiceTests.BusinessLogic
             Assert.Equal(0, actual);
         }
 
+        [InlineData(09)]
         [InlineData(10)]
-        [InlineData(11)]
         [Theory]
         public void CalculateDiscount_CouponOfAbsoluteType_ReturnAmount(uint amount)
         {
-            var checkoutDto = new CheckoutDto(new ShoppingCartDto(), 0, 0, 0);
+            var checkoutDto = new CheckoutDto(new ShoppingCartDto(), 0, 0, 10);
             var coupon = new Coupon(amount);
             var sut = new CouponEngine();
 
