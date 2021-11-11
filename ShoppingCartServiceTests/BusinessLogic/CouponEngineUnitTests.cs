@@ -55,5 +55,20 @@ namespace ShoppingCartServiceTests.BusinessLogic
 
             Assert.Throws<InvalidCouponException>(() => sut.CalculateDiscount(checkoutDto, coupon));
         }
+
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(1.1)]
+        [Theory]
+        public void CalculateDiscount_CouponOfPercentageType_EqualTotalTimesPercentage(double percentage)
+        {
+            var checkoutDto = createCheckoutDto(total: 100);
+            var coupon = new Coupon(percentage, ECouponType.Percentage);
+            var sut = new CouponEngine();
+
+            var actual = sut.CalculateDiscount(checkoutDto, coupon);
+
+            Assert.Equal(checkoutDto.Total * percentage / 100.0, actual);
+        }
     }
 }

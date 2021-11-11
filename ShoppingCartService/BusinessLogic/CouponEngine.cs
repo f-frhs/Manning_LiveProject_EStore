@@ -19,7 +19,11 @@ namespace ShoppingCartService.BusinessLogic
                     $"coupon.Amount({coupon.Amount}) cannot be more than total cart amount including shipping({checkoutDto.Total})");
             }
 
-            return coupon.Amount;
+            double result = 0;
+            if (coupon.Type == ECouponType.Absolute) result = coupon.Amount;
+            if (coupon.Type == ECouponType.Percentage) result = checkoutDto.Total * coupon.Percentage / 100.0;
+
+            return result;
         }
     }
 }
