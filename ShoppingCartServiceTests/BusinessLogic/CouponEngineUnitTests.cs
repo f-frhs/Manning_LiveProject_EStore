@@ -20,16 +20,17 @@ namespace ShoppingCartServiceTests.BusinessLogic
             Assert.Equal(0, actual);
         }
 
-        [Fact]
-        public void CalculateDiscount_CouponIsFor10_Return10()
+        [InlineData(10)]
+        [Theory]
+        public void CalculateDiscount_CouponOfAbsoluteType_ReturnAmount(uint amount)
         {
             var checkoutDto = new CheckoutDto(new ShoppingCartDto(), 0, 0, 0);
-            var coupon = new Coupon(10);
+            var coupon = new Coupon(amount);
             var sut = new CouponEngine();
 
             var actual = sut.CalculateDiscount(checkoutDto, coupon);
 
-            Assert.Equal(10, actual);
+            Assert.Equal(amount, actual);
         }
     }
 }
