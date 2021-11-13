@@ -5,7 +5,7 @@ using ShoppingCartService.Models;
 
 namespace ShoppingCartService.BusinessLogic
 {
-    public class CouponEngine
+    public class CouponEngine : ICouponEngine
     {
         public double CalculateDiscount(CheckoutDto checkoutDto, ICoupon coupon, DateTime? nullableToday = null)
         {
