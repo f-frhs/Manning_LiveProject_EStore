@@ -37,7 +37,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         public void CalculateDiscount_CouponOfAbsoluteType_ReturnAmount(uint amount)
         {
             var checkoutDto = createCheckoutDto(total: 10);
-            var coupon = new TypeAbsoluteCoupon(amount);
+            var coupon = TestHelper.CreateTypeAbsoluteCoupon(amount);
             var sut = new CouponEngine();
 
             var actual = sut.CalculateDiscount(checkoutDto, coupon);
@@ -51,7 +51,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         public void CalculateDiscount_CouponAmountIsMoreThanTotalCartAmount_ThrowInvalidCouponException(uint amount)
         {
             var checkoutDto = createCheckoutDto(total: 10);
-            var coupon = new TypeAbsoluteCoupon(amount);
+            var coupon = TestHelper.CreateTypeAbsoluteCoupon(amount);
             var sut = new CouponEngine();
 
             Assert.Throws<InvalidCouponException>(() => sut.CalculateDiscount(checkoutDto, coupon));
@@ -64,7 +64,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         public void CalculateDiscount_CouponOfPercentageType_EqualTotalTimesPercentage(double percentage)
         {
             var checkoutDto = createCheckoutDto(total: 100);
-            var coupon = new TypePercentageCoupon(percentage);
+            var coupon = TestHelper.CreateTypePercentageCoupon(percentage);
             var sut = new CouponEngine();
 
             var actual = sut.CalculateDiscount(checkoutDto, coupon);
@@ -78,7 +78,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         {
             var target = new CouponEngine();
 
-            var actual = target.CalculateDiscount(createCheckoutDto(total: 10), new TypePercentageCoupon(50));
+            var actual = target.CalculateDiscount(createCheckoutDto(total: 10), TestHelper.CreateTypePercentageCoupon(50));
 
             Assert.Equal(5, actual);
         }
@@ -89,7 +89,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
         public void CalculateDiscount_FreeShippingCoupon_EqualShippingCost(double shippingCost)
         {
             var checkoutDto = createCheckoutDto(shippingCost: shippingCost, total:10);
-            var coupon = new FreeShippingCoupon();
+            var coupon = TestHelper.CreateFreeShippingCoupon();
             var sut = new CouponEngine();
 
             var actual = sut.CalculateDiscount(checkoutDto, coupon);
@@ -106,7 +106,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
             var today = new DateTime(2021, 11, 8);
 
             var checkoutDto = createCheckoutDto(shippingCost: 1, total: 10);
-            var coupon = new FreeShippingCoupon(expiredAt);
+            var coupon = TestHelper.CreateFreeShippingCoupon(expiredAt);
             var sut = new CouponEngine();
 
             Assert.Throws<InvalidCouponException>(() => sut.CalculateDiscount(checkoutDto, coupon, today));
@@ -121,7 +121,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
             var today = new DateTime(2021, 11, 8);
 
             var checkoutDto = createCheckoutDto(shippingCost: 1, total: 10);
-            var coupon = new FreeShippingCoupon(expiredAt);
+            var coupon = TestHelper.CreateFreeShippingCoupon(expiredAt);
             var sut = new CouponEngine();
 
             var actual = sut.CalculateDiscount(checkoutDto, coupon, today);
@@ -138,7 +138,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
             var today = new DateTime(2021, 11, 8);
 
             var checkoutDto = createCheckoutDto(total: 10);
-            var coupon = new TypeAbsoluteCoupon(1, expiredAt);
+            var coupon = TestHelper.CreateTypeAbsoluteCoupon(1, expiredAt);
             var sut = new CouponEngine();
 
             Assert.Throws<InvalidCouponException>(() => sut.CalculateDiscount(checkoutDto, coupon, today));
@@ -153,7 +153,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
             var today = new DateTime(2021, 11, 8);
 
             var checkoutDto = createCheckoutDto(total: 10);
-            var coupon = new TypeAbsoluteCoupon(1, expiredAt);
+            var coupon = TestHelper.CreateTypeAbsoluteCoupon(1, expiredAt);
             var sut = new CouponEngine();
 
             var actual = sut.CalculateDiscount(checkoutDto, coupon, today);
@@ -170,7 +170,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
             var today = new DateTime(2021, 11, 8);
 
             var checkoutDto = createCheckoutDto(total: 10);
-            var coupon = new TypePercentageCoupon(1, expiredAt);
+            var coupon = TestHelper.CreateTypePercentageCoupon(1, expiredAt);
             var sut = new CouponEngine();
 
             Assert.Throws<InvalidCouponException>(() => sut.CalculateDiscount(checkoutDto, coupon, today));
@@ -185,7 +185,7 @@ namespace ShoppingCartServiceTests.BusinessLogic
             var today = new DateTime(2021, 11, 8);
 
             var checkoutDto = createCheckoutDto(total: 10);
-            var coupon = new TypePercentageCoupon(1, expiredAt);
+            var coupon = TestHelper.CreateTypePercentageCoupon(1, expiredAt);
             var sut = new CouponEngine();
 
             var actual = sut.CalculateDiscount(checkoutDto, coupon, today);

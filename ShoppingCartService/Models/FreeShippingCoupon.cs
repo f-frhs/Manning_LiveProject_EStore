@@ -5,12 +5,7 @@ namespace ShoppingCartService.Models
 {
     public class FreeShippingCoupon : CouponBase, IEquatable<FreeShippingCoupon>
     {
-        public FreeShippingCoupon()
-            : this(DateTime.Today.AddYears(1))
-        {
-        }
-
-        public FreeShippingCoupon(DateTime expiredAt) : base(expiredAt)
+        public FreeShippingCoupon(string id, DateTime expiredAt) : base(id, expiredAt)
         {
         }
 

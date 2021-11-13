@@ -27,17 +27,17 @@ namespace ShoppingCartServiceTests.DataAccess
 
         public static object[][] ValidCoupons =
         {
-            new object[] {new TypeAbsoluteCoupon(10)},
-            new object[] {new TypePercentageCoupon(10)},
-            new object[] {new FreeShippingCoupon()},
+            new object[] {TestHelper.CreateTypeAbsoluteCoupon(10)},
+            new object[] {TestHelper.CreateTypePercentageCoupon(10)},
+            new object[] {TestHelper.CreateFreeShippingCoupon()},
         };
 
         // to give different Ids than ValidCoupons
         public static object[][] NeverFoundCoupons =
         {
-            new object[] {new TypeAbsoluteCoupon(0)},
-            new object[] {new TypePercentageCoupon(0)},
-            new object[] {new FreeShippingCoupon()},
+            new object[] {TestHelper.CreateTypeAbsoluteCoupon(0)},
+            new object[] {TestHelper.CreateTypePercentageCoupon(0)},
+            new object[] {TestHelper.CreateFreeShippingCoupon()},
         };
 
         [Fact]
@@ -56,8 +56,8 @@ namespace ShoppingCartServiceTests.DataAccess
         {
             var repo = new CouponRepository(_databaseSettings);
             Assert.Empty(repo.FindAll());
-            var coupon0 = new FreeShippingCoupon();
-            var coupon1 = new TypeAbsoluteCoupon(10);
+            var coupon0 = TestHelper.CreateFreeShippingCoupon();
+            var coupon1 = TestHelper.CreateTypeAbsoluteCoupon(10);
             repo.Create(coupon0);
             repo.Create(coupon1);
             Assert.Equal(2, repo.FindAll().Count());

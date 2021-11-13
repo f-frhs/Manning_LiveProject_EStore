@@ -5,13 +5,8 @@ namespace ShoppingCartService.Models
 {
     public class TypePercentageCoupon : CouponBase, IEquatable<TypePercentageCoupon>
     {
-        public TypePercentageCoupon(double percentage)
-            : this(percentage, DateTime.Today.AddYears(1))
-        {
-        }
-
-        public TypePercentageCoupon(double percentage, DateTime expiredAt)
-            : base(expiredAt)
+        public TypePercentageCoupon(string id, DateTime expiredAt, double percentage)
+            : base(id, expiredAt)
         {
             setPercentage(percentage);
         }

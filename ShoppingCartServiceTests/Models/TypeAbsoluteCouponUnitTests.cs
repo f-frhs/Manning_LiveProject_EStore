@@ -12,7 +12,7 @@ namespace ShoppingCartServiceTests.Models
         [Theory]
         public void Ctor_ValidAmount_Pass(double amount)
         {
-            new TypeAbsoluteCoupon(amount);
+            TestHelper.CreateTypeAbsoluteCoupon(amount);
         }
 
         [InlineData(-1.1)]
@@ -20,7 +20,7 @@ namespace ShoppingCartServiceTests.Models
         [Theory]
         public void Ctor_InvalidAmount_ThrowArgumentOutOfRangeException(double amount)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new TypeAbsoluteCoupon(amount));
+            Assert.Throws<ArgumentOutOfRangeException>(() => TestHelper.CreateTypeAbsoluteCoupon(amount));
         }
     }
 }

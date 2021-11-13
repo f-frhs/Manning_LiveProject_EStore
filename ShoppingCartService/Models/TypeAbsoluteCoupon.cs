@@ -6,13 +6,8 @@ namespace ShoppingCartService.Models
 {
     public class TypeAbsoluteCoupon : CouponBase, IEquatable<TypeAbsoluteCoupon>
     {
-        public TypeAbsoluteCoupon(double amount)
-            : this(amount, DateTime.Today.AddYears(1))
-        {
-        }
-
-        public TypeAbsoluteCoupon(double amount, DateTime expiredAt)
-            : base(expiredAt)
+        public TypeAbsoluteCoupon(string id, DateTime expiredAt, double amount)
+            : base(id, expiredAt)
         {
             setAmount(amount);
         }

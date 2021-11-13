@@ -14,8 +14,9 @@ namespace ShoppingCartService.Models
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime ExpiredAt { get; set; }
 
-        protected CouponBase(DateTime expiredAt)
+        protected CouponBase(string id, DateTime expiredAt)
         {
+            Id = id;
             ExpiredAt = expiredAt;
         }
 

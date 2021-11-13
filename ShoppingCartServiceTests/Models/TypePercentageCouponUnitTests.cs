@@ -14,7 +14,7 @@ namespace ShoppingCartServiceTests.Models
         [Theory]
         public void Ctor_ValidPercentage_Pass(double percentage)
         {
-            new TypePercentageCoupon(percentage);
+            TestHelper.CreateTypePercentageCoupon(percentage);
         }
 
         [InlineData(-1.1)]
@@ -25,7 +25,7 @@ namespace ShoppingCartServiceTests.Models
         public void Ctor_InvalidPercentage_ThrowArgumentOutOfRangeException(double percentage)
         {
             Assert.Throws<ArgumentOutOfRangeException>(
-                () => new TypePercentageCoupon(percentage));
+                () => TestHelper.CreateTypePercentageCoupon(percentage));
         }
     }
 }

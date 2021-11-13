@@ -43,5 +43,31 @@ namespace ShoppingCartServiceTests
                 Items = new List<Item>(c.Items),
             };
         }
+
+        public static CouponBase CreateFreeShippingCoupon(DateTime? expiredAt = null)
+        {
+            return new FreeShippingCoupon(
+                MongoDB.Bson.ObjectId.GenerateNewId().ToString()
+                , expiredAt ?? DateTime.Today.AddYears(1)
+            );
+        }
+
+        public static CouponBase CreateTypeAbsoluteCoupon(double amount = 10, DateTime? expiredAt = null)
+        {
+            return new TypeAbsoluteCoupon(
+                MongoDB.Bson.ObjectId.GenerateNewId().ToString()
+                , expiredAt ?? DateTime.Today.AddYears(1)
+                , amount
+            );
+        }
+
+        public static CouponBase CreateTypePercentageCoupon(double percentage = 10, DateTime? expiredAt = null)
+        {
+            return new TypePercentageCoupon(
+                MongoDB.Bson.ObjectId.GenerateNewId().ToString()
+                , expiredAt ?? DateTime.Today.AddYears(1)
+                , percentage
+            );
+        }
     }
 }
